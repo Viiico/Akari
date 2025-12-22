@@ -1,12 +1,9 @@
 <template>
     <NavigationPanel />
-    <h1 class="text-4xl">Hello World!</h1>
+    <h1>Play Game</h1>
 </template>
 
 <script setup>
-useHead({
-    title: 'Akari Game',
-});
 </script>
 
 <style></style>
