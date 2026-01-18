@@ -1,6 +1,6 @@
 import { usersTable } from "../../db/schema";
 import { hash } from "bcrypt-ts";
-import {eq} from "drizzle-orm";
+import { eq } from "drizzle-orm";
 
 export default defineEventHandler(async (event) => {
   const { username, password } = await readBody(event);
@@ -32,7 +32,21 @@ export default defineEventHandler(async (event) => {
   const insertResult = await db
     .insert(usersTable)
     .values({ username, password: hashedPassword })
-    .returning();
+    .returning({
+      id: usersTable.id,
+      username: usersTable.username,
+      createdAt: usersTable.createdAt,
+    });
 
-  return { insertResult };
+  if (!insertResult || insertResult.length === 0) {
+    throw createError({
+      statusCode: 500,
+      statusMessage: "Failed to create user",
+    });
+  }
+
+  return {
+    success: true,
+    user: insertResult[0],
+  };
 });
