@@ -30,7 +30,7 @@
   }
 
   .rightNav {
-    width: 15vw;
+    width: 20vw;
   }
 
 </style>

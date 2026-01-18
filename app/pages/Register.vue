@@ -23,6 +23,8 @@
 import { reactive, ref } from 'vue';
 
 const error = ref<string | null>(null);
+const userLoggedIn = useState("userLoggedIn", () => false);
+const username = useState("username", () => "");
 
 async function submitForm() {
     error.value = null;
@@ -50,12 +52,26 @@ async function submitForm() {
         return;
     }
 
-    error.value = "User successfully created";
+    userLoggedIn.value = true;
+    username.value = form.username;
+    await navigateTo('/');
+    form.reset();
+
+    // error.value = "User successfully created";
 }
 
 const form = reactive({
     username: '',
-    password: ''
+    password: '',
+
+    reset() {
+        Object.assign(this, {
+            username: '',
+            password: '',
+            email: '',
+            rememberMe: false
+        });
+    }
 })
 
 </script>
