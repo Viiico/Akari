@@ -25,7 +25,7 @@ export default defineEventHandler(async (event) => {
     throw createError({
       statusCode: 404,
       statusMessage:
-        "User with such username could not have been retrieved from the database",
+        "User with such username wasn't found",
     });
   }
 

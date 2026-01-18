@@ -13,4 +13,4 @@ useHead({
 });
 </script>
 
-<style></style>
+<style scoped></style>
