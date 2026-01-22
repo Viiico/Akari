@@ -6,5 +6,3 @@ const db = drizzle(process.env.DATABASE_URL!, {schema});
 export function useDrizzle(){
     return db;
 }
-
-export type Fruit = typeof schema.fruitsTable.$inferSelect;

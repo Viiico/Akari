@@ -1,0 +1,24 @@
+meta {
+  name: SubmitScore
+  type: http
+  seq: 3
+}
+
+post {
+  url: http://localhost:3000/api/scores/submit-score
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "username": "TestUser",
+    "score": 1000,
+    "completionTime": 300
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

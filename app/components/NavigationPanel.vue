@@ -1,7 +1,7 @@
 <template>
   <nav class="flex justify-between items-center p-4 bg-neutral-200 navigationPanel">
     <div class="flex leftNav gap-2">
-      <NuxtLink to="/" :class="{ 'active': currentRoute === '/' }" class="nav-link">
+      <NuxtLink to="/" :class="{ 'active': currentRoute === '/' || currentRoute === '/Game' }" class="nav-link">
         Play Game
       </NuxtLink>
       <NuxtLink to="/BoardCreator" :class="{ 'active': currentRoute === '/BoardCreator' }" class="nav-link">

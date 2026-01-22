@@ -19,7 +19,6 @@
 </template>
 
 <script setup lang="ts">
-// import { navigateTo } from '#app';
 import { reactive, ref } from 'vue';
 
 const error = ref<string | null>(null);
