@@ -37,7 +37,7 @@ const currentRoute = computed(() => {
   color: black;
   height: 6vh;
   background-color: #2a2a2a;
-  border-bottom: 1px solid #444;
+  border-bottom: 0px solid #444;
 }
 
 .leftNav {
@@ -86,7 +86,7 @@ const currentRoute = computed(() => {
 
 .nav-link.active::after {
   content: '';
-  position: absolute;
+  position: fixed;
   bottom: -8px;
   left: 50%;
   transform: translateX(-50%);
