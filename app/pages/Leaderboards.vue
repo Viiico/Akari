@@ -5,7 +5,7 @@
   <p v-if="error"> An error has occured: {{ error.data.message }}</p>
   <ul v-else class="list-disc list-inside p-4">
     <li v-for="score in data?.scores" :key="score.id">
-      User {{ score.username }} - Score: {{ score.score }} - Time: {{ score.completionTime }}s
+      User {{ score.username }} - Score: {{ score.score }} - Time: {{ score.completionTime }}s - Date: {{ score.createdAt }}
     </li>
   </ul>
 </template>
