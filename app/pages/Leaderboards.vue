@@ -1,26 +1,114 @@
 <template>
   <NavigationPanel />
-  <h1>Leaderboards</h1>
-  <p v-if="pending">Loading...</p>
-  <p v-if="error"> An error has occured: {{ error.data.message }}</p>
-  <ul v-else class="list-disc list-inside p-4">
-    <li v-for="score in data?.scores" :key="score.id">
-      User {{ score.username }} - Score: {{ score.score }} - Time: {{ score.completionTime }}s
-    </li>
-  </ul>
+
+  <div class="p-6 max-w-5xl mx-auto">
+    <!-- Header -->
+    <h1 class="text-2xl font-bold text-center text-white mb-6">
+     Game statistics
+    </h1>
+
+     <!-- Buttons: daily / weekly / all time-->
+    <div class="flex flex-wrap gap-3 justify-center mb-6">
+      <button
+        v-for="type in types"
+        :key="type.value"
+        type="button"
+        @click="setType(type.value)"
+        :class="[
+          'px-6 py-2 rounded-lg border transition-colors min-w-[120px]',
+          selectedType === type.value
+            ? 'bg-blue-600 border-blue-600 text-white'
+            : 'bg-gray-700 border-gray-600 hover:bg-gray-600 text-gray-200'
+        ]"
+      >
+        {{ type.label }}
+      </button>
+    </div>
+
+	<p v-if="pending" class="text-gray-400 text-center">
+        Loading data...
+	</p>
+
+	<p v-if="error" class="text-red-500 text-center">
+         Error: {{ error.message }}
+	</p>
+
+	<div v-if="!pending && !error" class="max-h-[400px] overflow-y-auto border rounded">   </div>
+
+    <!-- Scores table -->
+    <div class="max-h-[400px] overflow-y-auto border rounded">
+     <table class="w-full border-collapse table-fixed">
+        <thead class="bg-gray-800 text-white sticky top-0">
+          <tr>
+           <th class="border p-2 w-12">No.</th>
+     	   <th class="border p-2 w-1/3">User name</th>
+     	   <th class="border p-2 w-1/3">Score</th>
+	   <th class="border p-2">Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            v-for="(score, index) in filteredScores"
+            :key="score.id"
+          >
+            <td class="border p-2 text-center">{{ index + 1 }}</td>
+            <td class="border p-2 text-center">{{ score.username }}</td>
+            <td class="border p-2 text-center">{{ score.score }}</td>
+            <td class="border p-2 text-center">{{ new Date(score.createdAt).toLocaleString() }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </template>
 
 <script setup>
-const { data, pending, error } = useFetch('/api/scores', {server: false});
 
 
-watchEffect(() => {
-  if (data.value) {
-    console.log('Leaderboard data:', data.value);
-    console.log('Scores array:', data.value.scores);
+import { ref, watch, computed } from 'vue'
+import { useRouter } from 'vue-router';
+import { onMounted } from 'vue';
+
+
+const types = [
+  { value: 'daily', label: 'Daily' },
+  { value: 'weekly', label: 'Weekly' },
+  { value: 'all time', label: 'All time' }
+
+]
+
+const selectedType = ref('daily')
+
+const scores = ref([])
+
+const { data, pending, error } = useFetch(
+  () => `/api/scores?type=${selectedType.value}`,
+  { server: false }
+)
+
+const router = useRouter();
+
+onMounted(() => {
+  const user = JSON.parse(localStorage.getItem('user') || 'null');
+  if (!user) {
+  alert('To see the game statistics, log in!')
+    router.push('/Login');
   }
 });
 
+watch(data, () => {
+  if (data.value?.scores) {
+    scores.value = data.value.scores
+  }
+})
+
+const filteredScores = computed(() => {
+  return scores.value
+})
+
+const setType = (type) => {
+  selectedType.value = type
+}
 </script>
 
 <style></style>
