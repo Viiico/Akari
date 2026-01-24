@@ -1,11 +1,146 @@
 <template>
   <NavigationPanel />
-    <h1>Board creator</h1>
+		<main class="creator-page">
+			<div class="container">
+						<div class="content-column">
+								<section class="section">
+									<h2 class="section-title">Board prerequisites</h2>
+									<form class="space-y-6">
+									<div class="space-y-3">
+											<label class="block text-cbd5e0 text-sm font-medium mb-2">
+													Board Size
+											</label>
+											<div class="flex flex-wrap gap-3 justify-center">
+													<button v-for="size in boardSizes" :key="size.value" type="button"
+															@click="selectedSize = size.value" :class="[
+																	'px-6 py-3 rounded-lg border transition-colors flex-1 min-w-[60px]',
+																	selectedSize === size.value
+																			? 'bg-blue-600 border-blue-600 text-white'
+																			: 'bg-gray-700 border-gray-600 hover:bg-gray-600 text-gray-200'
+															]">
+															{{ size.label }}
+													</button>
+											</div>
+									</div>
+									</form>
+								</section>
+						</div>
+			</div>
+		</main>
+
 </template>
 
-<script>
+<script setup>
+const selectedSize = useState('selectedSize', () => 'small');
+
+const boardSizes = [
+    { label: 'Small (7×7)', value: 'small' },
+    { label: 'Medium (10×10)', value: 'medium' },
+    { label: 'Large (14×14)', value: 'large' },
+    { label: 'Custom', value: 'custom' }
+];
+
+const difficulties = [
+    { label: 'Easy', value: 'easy' },
+    { label: 'Medium', value: 'medium' },
+    { label: 'Hard', value: 'hard' }
+];
 </script>
 
-<style>
+<style scoped>
+.creator-page {
+    height: calc(120vh - 60px);
+    background-color: #1F1F1F;
+    color: white;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: auto;
+}
 
+.container {
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+.content-column {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.section {
+    background-color: #2a2a2a;
+    padding: 2.5rem 3rem;
+    border-radius: 12px;
+    border-left: 6px solid #4299e1;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.section-title {
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    color: #e2e8f0;
+    text-align: center;
+}
+
+.paragraph {
+    font-size: 1.1rem;
+    line-height: 1.7;
+    margin-bottom: 0.75rem;
+    color: #cbd5e0;
+    flex-grow: 1;
+    text-align: center;
+}
+
+.text-cbd5e0 {
+    color: #cbd5e0;
+}
+
+@media (max-width: 768px) {
+    .creator-page {
+        height: calc(120vh - 60px);
+        padding: 1rem;
+    }
+    
+    .container {
+        padding: 0 1rem;
+    }
+    
+    .content-column {
+        gap: 2rem;
+    }
+    
+    .section {
+        padding: 1.5rem;
+    }
+    
+    .section-title {
+        font-size: 1.4rem;
+    }
+    
+    .paragraph {
+        font-size: 1rem;
+    }
+}
+
+@media (max-height: 700px) {
+    .content-column {
+        gap: 1.5rem;
+    }
+    
+    .section {
+        padding: 1.5rem 2rem;
+    }
+}
 </style>
