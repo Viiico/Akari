@@ -65,15 +65,15 @@
 
 <style scoped>
 .how-to-play-page {
-  min-height: calc(80vh - 60px);
-  max-height: 94vh;
+  min-height: calc(110vh - 60px);
+  max-height: 130vh;
   background-color: #1F1F1F;
   color: white;
   padding: 1rem 1rem 2rem 1rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
+  overflow: auto;
 
 }
 
@@ -87,7 +87,7 @@
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 1.5rem;
-  margin-bottom: 0.5rem;
+  margin-bottom: 1rem;
 }
 
 .section {
