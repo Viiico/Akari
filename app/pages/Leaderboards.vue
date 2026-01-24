@@ -1,6 +1,7 @@
 <template>
   <NavigationPanel />
 
+
   <div class="p-6 max-w-5xl mx-auto">
     <!-- Header -->
     <h1 class="text-2xl font-bold text-center text-white mb-6">
@@ -60,6 +61,7 @@
       </table>
     </div>
   </div>
+
 </template>
 
 <script setup>
