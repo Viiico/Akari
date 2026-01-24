@@ -91,14 +91,14 @@ const startGame = async () => {
 
 <style scoped>
 .how-to-play-page {
-    height: calc(100vh - 60px);
+    height: calc(120vh - 60px);
     background-color: #1F1F1F;
     color: white;
     padding: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    overflow: hidden;
+    overflow: auto;
 }
 
 .container {
@@ -151,7 +151,7 @@ const startGame = async () => {
 
 @media (max-width: 768px) {
     .how-to-play-page {
-        height: calc(100vh - 60px);
+        height: calc(120vh - 60px);
         padding: 1rem;
     }
     
