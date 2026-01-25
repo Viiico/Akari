@@ -7,7 +7,7 @@
                 <span v-else>You are not signed in</span>
             </button>
 
-            <div v-if="dropdownOpen" class="dropdown-menu">
+            <div v-if="userLoginDropdownOpen" class="dropdown-menu">
                 <!-- Not Signed In State -->
                 <div v-if="!userLoggedIn" class="dropdown-content">
                     <form class="flex flex-col gap-2 items-center" @submit.prevent="submitSignForm">
@@ -51,7 +51,7 @@ onUnmounted(() => {
 
 const userLoggedIn = useState("userLoggedIn", () => false);
 const username = useState("username", () => "");
-const dropdownOpen = ref(false);
+const userLoginDropdownOpen = useState("userLoginDropdownOpen", () => false);
 const error = ref(null);
 
 const form = reactive({
@@ -67,26 +67,26 @@ const form = reactive({
 });
 
 const toggleSignDropdown = () => {
-    dropdownOpen.value = !dropdownOpen.value;
+    userLoginDropdownOpen.value = !userLoginDropdownOpen.value;
 }
 
 const signIn = () => {
     if (username.value.trim()) {
         userLoggedIn.value = true;
-        dropdownOpen.value = false;
+        userLoginDropdownOpen.value = false;
     }
 };
 
 const signOut = () => {
     userLoggedIn.value = false;
     username.value = "";
-    dropdownOpen.value = false;
+    userLoginDropdownOpen.value = false;
 };
 
 const closeOnClickOutside = (event) => {
     const dropdownElement = document.querySelector('#signedInformation');
     if (dropdownElement && !dropdownElement.contains(event.target)) {
-        dropdownOpen.value = false;
+        userLoginDropdownOpen.value = false;
     }
 };
 
@@ -117,7 +117,7 @@ async function submitSignForm() {
 
     // Successfull signin
     userLoggedIn.value = true;
-    dropdownOpen.value = false;
+    userLoginDropdownOpen.value = false;
     username.value = form.username;
     form.reset();
 

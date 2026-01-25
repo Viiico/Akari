@@ -66,12 +66,12 @@ definePageMeta({
 const types = Object.values(LeaderboardPeriodsType)
   .map((period) => ({ label: period.toLowerCase(), value: period }))
 
-const selectedType = ref('daily')
+const selectedType = ref(LeaderboardPeriodsType.DAILY)
 
 const scores = ref([])
 
 const { data, pending, error } = useFetch(
-  () => `/api/scores?type=${selectedType.value}`,
+  () => `/api/scores/get-scores?type=${selectedType.value}`,
   { server: false }
 )
 

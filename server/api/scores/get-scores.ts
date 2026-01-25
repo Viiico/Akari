@@ -1,5 +1,5 @@
-import { scoreTable, usersTable } from "../db/schema";
-import { useDrizzle } from "../utils/drizzle";
+import { scoreTable, usersTable } from "../../db/schema";
+import { useDrizzle } from "../../utils/drizzle";
 import { desc, eq } from "drizzle-orm";
 
 export default defineEventHandler(async (event) => {
