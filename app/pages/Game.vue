@@ -191,13 +191,7 @@ const submitScore = async () => {
 };
 
 function printDiv() {
-    const printContents = document.getElementById('board')!.innerHTML;
-    const originalContents = document.body.innerHTML;
-
-    document.body.innerHTML = printContents;
     window.print();
-    document.body.innerHTML = originalContents;
-    window.location.reload();
 }
 </script>
 
@@ -207,5 +201,70 @@ function printDiv() {
     max-width: 1200px;
     margin: 0 auto;
     background-color: #1F1F1F;
+}
+
+@media print {
+    html, body {
+        height: auto !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        background-color: white !important;
+    }
+
+    #navigationPanel {
+        display: none;
+    }
+
+    body > * {
+        display: none !important;
+    }
+
+    main {
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center;
+        background: transparent !important;
+        min-height: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        width: 100% !important;
+    }
+
+    main > * {
+        display: none !important;
+    }
+
+    main .flex.justify-center.mb-8 {
+        display: flex !important;
+        justify-content: center !important;
+        margin-top: 20mm !important; 
+    }
+
+    #board {
+        display: block !important;
+        background-color: white !important;
+        border: none !important;
+        box-shadow: none !important;
+        width: fit-content !important;
+    }
+
+    :deep(.grid) {
+        border: 2px solid black !important;
+        gap: 0 !important;
+        width: fit-content !important;
+    }
+
+    :deep(.grid > div),
+    :deep(div[class*="Cell"]) {
+        border: 1px solid black !important;
+        background-color: white !important;
+        color: black !important;
+        print-color-adjust: exact;
+        -webkit-print-color-adjust: exact;
+    }
+
+    :deep(.bg-gray-800) {
+        background-color: #eee !important; 
+    }
 }
 </style>
