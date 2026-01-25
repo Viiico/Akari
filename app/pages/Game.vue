@@ -53,22 +53,8 @@
             </div>
         </div>
 
-        <!-- Login Warning -->
-        <div v-if="!userLoggedIn"
-            class="mb-6 p-3 bg-yellow-900 border border-yellow-700 rounded max-w-md mx-auto items-center flex justify-center">
-            <div class="flex items-center">
-                <p class="text-sm items-center flex justify-center">
-                    <button @click="toggleSignDropdown"
-                        class="nav-link inline-block text-blue-400 hover:text-blue-300 transition-colors font-medium">
-                        Log in
-                    </button>
-                    to your account to save your score.
-                </p>
-            </div>
-        </div>
-
         <!-- Game Board -->
-        <div class="flex justify-center mb-8" ref="printArea">
+        <div class="flex justify-center mb-8">
             <div id='board' v-if="boardGrid.length > 0"
                 class="inline-block p-4 bg-gray-800 border border-gray-700 rounded">
                 <div class="grid gap-0" :style="{ gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))` }">
