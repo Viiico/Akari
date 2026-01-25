@@ -1,5 +1,3 @@
-[file name]: Game.vue
-[file content begin]
 <template>
     <NavigationPanel />
     <main class="container min-h-screen text-white p-4">
@@ -20,39 +18,24 @@
                     <div class="text-2xl font-bold text-yellow-400">{{ calculatedScore }}</div>
                 </div>
             </div>
-            
+
             <!-- Score Submission Section -->
             <div class="text-center mt-6">
-                <button 
-                    v-if="userLoggedIn && !scoreSubmitted && !isSubmitting"
-                    @click="submitScore"
-                    class="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-md transition-colors"
-                >
+                <button v-if="userLoggedIn && !scoreSubmitted && !isSubmitting" @click="submitScore"
+                    class="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-md transition-colors">
                     Zapisz wynik w rankingu
                 </button>
-                <button 
-                    v-if="userLoggedIn && !scoreSubmitted && isSubmitting"
-                    disabled
-                    class="px-6 py-3 bg-blue-400 text-white font-medium rounded-md transition-colors"
-                >
+                <button v-if="userLoggedIn && !scoreSubmitted && isSubmitting" disabled
+                    class="px-6 py-3 bg-blue-400 text-white font-medium rounded-md transition-colors">
                     Zapisywanie...
                 </button>
-                <div 
-                    v-if="userLoggedIn && scoreSubmitted"
-                    class="text-green-400 font-medium"
-                >
+                <div v-if="userLoggedIn && scoreSubmitted" class="text-green-400 font-medium">
                     ✓ Wynik został zapisany!
                 </div>
-                <div 
-                    v-if="!userLoggedIn"
-                    class="text-yellow-400 text-sm mt-2"
-                >
+                <div v-if="!userLoggedIn" class="text-yellow-400 text-sm mt-2">
                     Zaloguj się, aby mieć opcję zapisania swojego wyniku
                 </div>
-                <div 
-                    v-if="submitError"
-                    class="text-red-400 text-sm mt-2"
-                >
+                <div v-if="submitError" class="text-red-400 text-sm mt-2">
                     {{ submitError }}
                 </div>
             </div>
@@ -85,7 +68,7 @@
         </div>
 
         <!-- Game Board -->
-        <div class="flex justify-center mb-8">
+        <div class="flex justify-center mb-8" ref="printArea">
             <div id='board' v-if="boardGrid.length > 0"
                 class="inline-block p-4 bg-gray-800 border border-gray-700 rounded">
                 <div class="grid gap-0" :style="{ gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))` }">
@@ -106,7 +89,7 @@
             <NuxtLink to="/" class="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded">
                 Wyjdź z gry
             </NuxtLink>
-            <button @click="printDiv('board')"
+            <button @click="printDiv()"
                 class="px-5 py-2 bg-gray-700 hover:bg-gray-600 text-white font-medium rounded">
                 Drukuj planszę
             </button>
@@ -124,9 +107,7 @@ import { useGameBoard } from '../composables/useGameBoard';
 import { CellType, GameStates } from '../lib/Types/Game';
 import { BoardSize as BoardSizeType, Difficulty as DifficultyType } from "../lib/Types/Game";
 import { useState } from '#app';
-import { useRouter } from 'vue-router';
 
-const router = useRouter()
 const selectedSize = useState('selectedSize', () => BoardSizeType.SMALL);
 const selectedDifficulty = useState('selectedDifficulty', () => DifficultyType.EASY);
 const userLoggedIn = useState("userLoggedIn", () => false);
@@ -178,7 +159,7 @@ const submitScore = async () => {
     try {
         // Konwersja czasu z milisekund na sekundy
         const completionTimeInSeconds = Math.floor(timer.value / 1000);
-        
+
         const response = await $fetch.raw('/api/scores/submit-score', {
             method: 'POST',
             body: {
@@ -209,8 +190,8 @@ const submitScore = async () => {
     }
 };
 
-function printDiv(divName: string) {
-    const printContents = document.getElementById(divName)!.innerHTML;
+function printDiv() {
+    const printContents = document.getElementById('board')!.innerHTML;
     const originalContents = document.body.innerHTML;
 
     document.body.innerHTML = printContents;
@@ -228,4 +209,3 @@ function printDiv(divName: string) {
     background-color: #1F1F1F;
 }
 </style>
-[file content end]
