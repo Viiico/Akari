@@ -27,6 +27,12 @@ export enum GenerationModes {
   VALID = "VALID",
 }
 
+export enum GameStates {
+  NOT_STARTED = "NOT_STARTED",
+  PLAYING = "PLAYING",
+  WON = "WON",
+}
+
 // WallCellState: 0-4 Liczba żarówek. 5 - Czarne Pole bez podpowiedzi
 
 export interface ICell {

@@ -2,6 +2,11 @@
     <NavigationPanel />
     <main class="game-container">
         <div class="container mx-auto p-4">
+            <!-- Winning Message -->
+            <div v-if="gameState === GameStates.WON"
+                class="mb-6 p-4 bg-green-900/30 border border-green-500 rounded-md">
+                <h3 class="text-lg font-semibold text-green-400 text-center">Gratulacje! Rozwiązałeś planszę!</h3>
+            </div>
             <!-- Game Board -->
             <div class="flex justify-center mb-6">
                 <div id='board' v-if="boardGrid.length > 0" class="inline-block p-4 bg-gray 800 rounded-lg">
@@ -65,7 +70,7 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue';
 import { useGameBoard } from '../composables/useGameBoard';
-import { CellType } from '../lib/Types/Game';
+import { CellType, GameStates } from '../lib/Types/Game';
 import { BoardSize as BoardSizeType, Difficulty as DifficultyType } from "../lib/Types/Game";
 import { useState } from '#app';
 import { useRouter } from 'vue-router';
