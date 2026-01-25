@@ -69,20 +69,22 @@
 </template>
 
 <script setup>
-const selectedSize = useState('selectedSize', () => 'small');
-const selectedDifficulty = useState('selectedDifficulty', () => 'easy');
+import { BoardSize as BoardSizeType, Difficulty as DifficultyType } from "../lib/Types/Game";
 
-const boardSizes = [
-    { label: 'Small (7×7)', value: 'small' },
-    { label: 'Medium (10×10)', value: 'medium' },
-    { label: 'Large (14×14)', value: 'large' }
-];
+const selectedSize = useState('selectedSize', () => BoardSizeType.SMALL);
+const selectedDifficulty = useState('selectedDifficulty', () => DifficultyType.EASY);
 
-const difficulties = [
-    { label: 'Easy', value: 'easy' },
-    { label: 'Medium', value: 'medium' },
-    { label: 'Hard', value: 'hard' }
-];
+const boardSizes = Object.values(BoardSizeType)
+    .filter(val => typeof val === 'number')
+    .map((size) => ({ label: `${size}x${size}`, value: size }));
+
+const difficulties = Object.values(DifficultyType)
+    .map((diff) => ({ label: diff, value: diff }));
+
+    console.log(difficulties);
+    
+
+
 
 const startGame = async () => {
     await navigateTo("/Game")
