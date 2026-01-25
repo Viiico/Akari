@@ -21,6 +21,12 @@ export enum BoardSize {
   LARGE = 14,
 }
 
+export enum GenerationModes {
+  RANDOM = "RANDOM",
+  EMPTY = "EMPTY",
+  VALID = "VALID",
+}
+
 // WallCellState: 0-4 Liczba żarówek. 5 - Czarne Pole bez podpowiedzi
 
 export interface ICell {

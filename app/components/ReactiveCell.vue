@@ -1,5 +1,6 @@
 <template>
     <div :class="cellClasses">
+        <!-- <span class="flex justify-center items-center">{{  cell.isLit }}</span> -->
         <div v-if="cell.state === ReactiveCellState.EMPTY && !cell.isLit" class="empty-cell"></div>
         <div v-else-if="cell.state === ReactiveCellState.EMPTY && cell.isLit" class="lit-empty-cell"></div>
         <div v-if="cell.state === ReactiveCellState.BULB">

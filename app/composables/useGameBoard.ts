@@ -1,10 +1,10 @@
 import { ref, reactive } from "vue";
 import { Board } from "~/lib/Game/Board";
 import type { ReactiveCell } from "~/lib/Game/Cell";
-import { CellType, ReactiveCellState } from "~/lib/Types/Game";
+import { CellType, ReactiveCellState, Difficulty, GenerationModes } from "~/lib/Types/Game";
 
 export function useGameBoard() {
-  const board = ref<Board>(Board.empty());
+  const board = ref<Board>(new Board());
   const gameState = reactive({
     playingTime: 0,
   });
@@ -13,7 +13,7 @@ export function useGameBoard() {
     rows: number = Board.DEFAULT_SIZE,
     cols: number = Board.DEFAULT_SIZE,
   ) => {
-    board.value = Board.random(rows, cols);
+    board.value = new Board(rows, cols, Difficulty.EASY, GenerationModes.VALID);
     gameState.playingTime = 0;
   };
 

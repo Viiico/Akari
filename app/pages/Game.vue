@@ -70,8 +70,7 @@ import { useRouter } from 'vue-router';
 
 const router = useRouter()
 const selectedSize = useState('selectedSize', () => BoardSizeType.SMALL);
-const selectedDifficulty = useState('selectedDifficulty', () => 'easy');
-const username = useState("username", () => "");
+const selectedDifficulty = useState('selectedDifficulty', () => DifficultyType.EASY);
 
 
 const {
