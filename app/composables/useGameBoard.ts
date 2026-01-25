@@ -128,6 +128,7 @@ export function useGameBoard() {
       stopTimer();
       gameState.value = GameStates.WON;
     }
+    
     return isSolved.value;
   };
 

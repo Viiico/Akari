@@ -1,90 +1,125 @@
+[file name]: Game.vue
+[file content begin]
 <template>
     <NavigationPanel />
-    <main class="game-container">
+    <main class="container min-h-screen text-white p-4">
         <!-- Winning Message -->
-        <div v-if="gameState === GameStates.WON" class="mb-6 p-4 bg-green-900/30 border border-green-500 rounded-md">
-            <h3 class="text-lg font-semibold text-green-400 text-center">Gratulacje! Rozwiązałeś planszę!</h3>
-            <div class="text-center mt-2">
-                <p>Czas: {{ formattedTime }}</p>
-                <p>Liczba ruchów: {{ movesCount }}</p>
-                <p>Uzyskany wynik: {{ calculatedScore }}</p>
+        <div v-if="gameState === GameStates.WON" class="mb-6 p-4 bg-green-800 border border-green-600 rounded">
+            <h3 class="text-xl font-bold text-center mb-2">Gratulacje! Rozwiązałeś planszę!</h3>
+            <div class="flex justify-center space-x-8">
+                <div class="text-center">
+                    <div class="text-gray-300 text-sm">Czas</div>
+                    <div class="text-2xl font-bold">{{ formattedTime }}</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-gray-300 text-sm">Ruchy</div>
+                    <div class="text-2xl font-bold">{{ movesCount }}</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-gray-300 text-sm">Wynik</div>
+                    <div class="text-2xl font-bold text-yellow-400">{{ calculatedScore }}</div>
+                </div>
+            </div>
+            
+            <!-- Score Submission Section -->
+            <div class="text-center mt-6">
+                <button 
+                    v-if="userLoggedIn && !scoreSubmitted && !isSubmitting"
+                    @click="submitScore"
+                    class="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-md transition-colors"
+                >
+                    Zapisz wynik w rankingu
+                </button>
+                <button 
+                    v-if="userLoggedIn && !scoreSubmitted && isSubmitting"
+                    disabled
+                    class="px-6 py-3 bg-blue-400 text-white font-medium rounded-md transition-colors"
+                >
+                    Zapisywanie...
+                </button>
+                <div 
+                    v-if="userLoggedIn && scoreSubmitted"
+                    class="text-green-400 font-medium"
+                >
+                    ✓ Wynik został zapisany!
+                </div>
+                <div 
+                    v-if="!userLoggedIn"
+                    class="text-yellow-400 text-sm mt-2"
+                >
+                    Zaloguj się, aby zapisać swój wynik w rankingu.
+                </div>
+                <div 
+                    v-if="submitError"
+                    class="text-red-400 text-sm mt-2"
+                >
+                    {{ submitError }}
+                </div>
             </div>
         </div>
 
-        <!-- Game Stats -->
-        <div v-if="gameState !== GameStates.WON" class="mb-6 flex justify-center items-center space-x-8">
-            <div class="stat-box">
-                <div class="stat-label">Czas</div>
-                <div class="stat-value">{{ formattedTime }}</div>
+        <!-- Game Stats (During Play) -->
+        <div v-if="gameState !== GameStates.WON" class="mb-6 flex justify-center space-x-8">
+            <div class="text-center">
+                <div class="text-gray-400 text-sm">Czas</div>
+                <div class="text-2xl font-bold">{{ formattedTime }}</div>
             </div>
-            <div class="stat-box">
-                <div class="stat-label">Ruchy</div>
-                <div class="stat-value">{{ movesCount }}</div>
+            <div class="text-center">
+                <div class="text-gray-400 text-sm">Ruchy</div>
+                <div class="text-2xl font-bold">{{ movesCount }}</div>
             </div>
         </div>
-        <div class="container mx-auto p-4">
-            <!-- Game Board -->
-            <div class="flex justify-center mb-6">
-                <div id='board' v-if="boardGrid.length > 0" class="inline-block p-4 bg-gray 800 rounded-lg">
-                    <div class="grid gap-0" :style="{ gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))` }">
-                        <div v-for="(row, rowIndex) in boardGrid" :key="rowIndex" class="contents">
-                            <template v-for="(cell, colIndex) in row" :key="colIndex">
-                                <WallCell v-if="cell.type === CellType.WALL" :cell="cell"></WallCell>
-                                <ReactiveCell v-else-if="cell.type === CellType.REACTIVE" :cell="cell"
-                                    @click="handleCellClickLeft(rowIndex, colIndex)"
-                                    @click.right.prevent="handleCellClickRight(rowIndex, colIndex)"></ReactiveCell>
-                            </template>
-                        </div>
+
+        <!-- Login Warning -->
+        <div v-if="!userLoggedIn"
+            class="mb-6 p-3 bg-yellow-900 border border-yellow-700 rounded max-w-md mx-auto items-center flex justify-center">
+            <div class="flex items-center">
+                <p class="text-sm items-center flex justify-center">
+                    <button @click="toggleSignDropdown"
+                        class="nav-link inline-block text-blue-400 hover:text-blue-300 transition-colors font-medium">
+                        Zaloguj się
+                    </button>
+                    , aby Twój wynik został zapisany w rankingu.
+                </p>
+            </div>
+        </div>
+
+        <!-- Game Board -->
+        <div class="flex justify-center mb-8">
+            <div id='board' v-if="boardGrid.length > 0"
+                class="inline-block p-4 bg-gray-800 border border-gray-700 rounded">
+                <div class="grid gap-0" :style="{ gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))` }">
+                    <div v-for="(row, rowIndex) in boardGrid" :key="rowIndex" class="contents">
+                        <template v-for="(cell, colIndex) in row" :key="colIndex">
+                            <WallCell v-if="cell.type === CellType.WALL" :cell="cell"></WallCell>
+                            <ReactiveCell v-else-if="cell.type === CellType.REACTIVE" :cell="cell"
+                                @click="handleCellClickLeft(rowIndex, colIndex)"
+                                @click.right.prevent="handleCellClickRight(rowIndex, colIndex)"></ReactiveCell>
+                        </template>
                     </div>
                 </div>
             </div>
-            <div class="mt-8 flex flex-wrap gap-3 justify-center">
-                <button @click="quitGame"
-                    class="button px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-md transition-colors disabled:bg-gray-500">
-                    Quit the game
-                </button>
-                <button @click="printDiv('board')"
-                    class="button px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-md transition-colors disabled:bg-gray-500">
-                    Print the game board
-                </button>
-                <button @click="initializeBoard(selectedSize, selectedSize)"
-                    class="button px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-md transition-colors disabled:bg-gray-500">
-                    Start a new game
-                </button>
-            </div>
+        </div>
+
+        <!-- Game Controls -->
+        <div class="flex flex-wrap justify-center gap-4">
+            <NuxtLink to="/" class="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded">
+                Wyjdź z gry
+            </NuxtLink>
+            <button @click="printDiv('board')"
+                class="px-5 py-2 bg-gray-700 hover:bg-gray-600 text-white font-medium rounded">
+                Drukuj planszę
+            </button>
+            <button @click="startNewGame"
+                class="px-5 py-2 bg-green-600 hover:bg-green-700 text-white font-medium rounded">
+                Nowa gra
+            </button>
         </div>
     </main>
-    <!-- <main class="how-to-play-page">
-        <div class="container">
-            <h1>Play Game - {{ selectedSizeLabel }} ({{ selectedDifficultyLabel }})</h1>
-
-            <div class="mt-8 flex flex-wrap gap-3 justify">
-                <button @click="submitRandomScore" :disabled="isSubmitting"
-                    class="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-md transition-colors disabled:bg-gray-500">
-                    {{ isSubmitting ? 'Submitting...' : 'Submit Random Score' }}
-                </button>
-                <button @click="printDiv('board')"
-                    class="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-md transition-colors disabled:bg-gray-500">
-                    Print
-                </button>
-            </div>
-
-            <div v-if="lastSubmission" class="mt-6 p-4 bg-gray-800 rounded-md">
-                <h3 class="text-lg font-semibold text-green-400">Last Submission:</h3>
-                <p>Score: {{ lastSubmission.score }}</p>
-                <p>Time: {{ lastSubmission.completionTime }}s</p>
-            </div>
-
-            <div v-if="error" class="mt-6 p-4 bg-red-900/30 border border-red-500 rounded-md">
-                <p class="text-red-400">Error: {{ error }}</p>
-            </div>
-
-        </div>
-    </main> -->
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useGameBoard } from '../composables/useGameBoard';
 import { CellType, GameStates } from '../lib/Types/Game';
 import { BoardSize as BoardSizeType, Difficulty as DifficultyType } from "../lib/Types/Game";
@@ -94,7 +129,9 @@ import { useRouter } from 'vue-router';
 const router = useRouter()
 const selectedSize = useState('selectedSize', () => BoardSizeType.SMALL);
 const selectedDifficulty = useState('selectedDifficulty', () => DifficultyType.EASY);
-
+const userLoggedIn = useState("userLoggedIn", () => false);
+const userLoginDropdownOpen = useState("userLoginDropdownOpen", () => false);
+const username = useState('username', () => '');
 
 const {
     board,
@@ -103,6 +140,7 @@ const {
     cols,
     boardGrid,
     movesCount,
+    timer,
     formattedTime,
     calculatedScore,
     initializeBoard,
@@ -110,85 +148,83 @@ const {
     handleCellClickRight
 } = useGameBoard();
 
+const isSubmitting = ref(false);
+const submitError = ref('');
+const scoreSubmitted = ref(false);
+
 onMounted(() => {
     initializeBoard(selectedSize.value, selectedSize.value, selectedDifficulty.value);
 });
 
+const toggleSignDropdown = () => {
+    userLoginDropdownOpen.value = !userLoginDropdownOpen.value;
+}
+
+const startNewGame = () => {
+    scoreSubmitted.value = false;
+    submitError.value = '';
+    initializeBoard(selectedSize.value, selectedSize.value, selectedDifficulty.value);
+};
+
+const submitScore = async () => {
+    if (!userLoggedIn.value) {
+        submitError.value = 'Musisz być zalogowany, aby zapisać wynik.';
+        return;
+    }
+
+    isSubmitting.value = true;
+    submitError.value = '';
+
+    try {
+        // Konwersja czasu z milisekund na sekundy
+        const completionTimeInSeconds = Math.floor(timer.value / 1000);
+        
+        const response = await $fetch.raw('/api/scores/submit-score', {
+            method: 'POST',
+            body: {
+                username: username.value,
+                score: calculatedScore.value,
+                completionTime: completionTimeInSeconds,
+                boardSize: selectedSize.value,
+                difficulty: selectedDifficulty.value,
+                moves: movesCount.value
+            },
+            async onResponseError({ response }) {
+                isSubmitting.value = false;
+                submitError.value = response._data?.message || 'Wystąpił błąd podczas zapisywania wyniku.';
+                return;
+            }
+        });
+
+        if (response.ok) {
+            scoreSubmitted.value = true;
+            submitError.value = '';
+        } else {
+            submitError.value = 'Wystąpił błąd podczas zapisywania wyniku.';
+        }
+    } catch (error: any) {
+        submitError.value = error.message || 'Wystąpił błąd podczas zapisywania wyniku.';
+    } finally {
+        isSubmitting.value = false;
+    }
+};
 
 function printDiv(divName: string) {
-    var printContents = document.getElementById(divName).innerHTML;
-    var originalContents = document.body.innerHTML;
+    const printContents = document.getElementById(divName)!.innerHTML;
+    const originalContents = document.body.innerHTML;
 
     document.body.innerHTML = printContents;
-
     window.print();
-
     document.body.innerHTML = originalContents;
 }
-
-function quitGame() {
-    router.push('/');
-}
-
-
-
-// const selectedSizeLabel = computed(() => {
-//     const sizes = { small: '7×7', medium: '10×10', large: '14×14' };
-//     return sizes[selectedSize.value] || '7×7';
-// });
-
-// const selectedDifficultyLabel = computed(() => {
-//     const difficulties = { easy: 'Easy', medium: 'Medium', hard: 'Hard' };
-//     return difficulties[selectedDifficulty.value] || 'Easy';
-// });
-
-// const isSubmitting = ref(false);
-// const lastSubmission = ref(null);
-// const error = ref(null);
-
-// const submitRandomScore = async () => {
-//     isSubmitting.value = true;
-//     error.value = null;
-
-//     const score = Math.floor(Math.random() * 10000) + 1000;
-//     const completionTime = Math.floor(Math.random() * 600) + 60;
-
-//     console.log(`About to send: ${username.value}, ...`);
-
-
-//     const response = await $fetch.raw('/api/scores/submit-score', {
-//         method: 'POST',
-//         body: {
-//             username: username.value,
-//             score,
-//             completionTime
-//         },
-//         async onResponseError({ response }) {
-//             isSubmitting.value = false;
-//             error.value = (response._data).message;
-//             return;
-//         }
-//     });
-
-//     lastSubmission.value = {
-//         score: randomScore,
-//         completionTime: randomTime,
-//         userId: response.userId || 'Unknown'
-//     };
-// };
 </script>
 
 <style scoped>
-.how-to-play-page {
-    min-height: calc(100vh - 60px);
-    background-color: #1F1F1F;
-    color: white;
-    padding: 2rem 1rem;
-}
-
 .container {
     width: 95%;
     max-width: 1200px;
     margin: 0 auto;
+    background-color: #1F1F1F;
 }
 </style>
+[file content end]

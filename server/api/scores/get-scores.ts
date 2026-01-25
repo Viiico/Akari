@@ -1,7 +1,7 @@
 import { scoreTable, usersTable } from "../../db/schema";
 import { useDrizzle } from "../../utils/drizzle";
 import { desc, eq, gte } from "drizzle-orm";
-import { LeaderBoardPeriods as LeaderboardPeriodsType } from "../../../app/lib/Types/Generic";
+import { LeaderBoardPeriods as LeaderboardPeriodsType } from "../../../app/lib/Types/Game";
 
 export default defineEventHandler(async (event) => {
   const db = useDrizzle();

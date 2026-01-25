@@ -57,7 +57,7 @@
 
 <script setup>
 import { ref, watch, computed } from 'vue'
-import { LeaderBoardPeriods as LeaderboardPeriodsType } from "../lib/Types/Generic"
+import { LeaderBoardPeriods as LeaderboardPeriodsType } from "../lib/Types/Game";
 
 definePageMeta({
   middleware: ['auth']

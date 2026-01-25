@@ -33,6 +33,12 @@ export enum GameStates {
   WON = "WON",
 }
 
+export enum LeaderBoardPeriods {
+  DAILY = "DAILY",
+  WEEKLY = "WEEKLY",
+  ALL_TIME = "ALL_TIME",
+}
+
 // WallCellState: 0-4 Liczba żarówek. 5 - Czarne Pole bez podpowiedzi
 
 export interface ICell {
