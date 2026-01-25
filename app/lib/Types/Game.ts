@@ -18,7 +18,7 @@ export enum Difficulty {
 export enum BoardSize {
   SMALL = 7,
   MEDIUM = 10,
-  LARGE = 30,
+  LARGE = 14,
 }
 
 // WallCellState: 0-4 Liczba żarówek. 5 - Czarne Pole bez podpowiedzi

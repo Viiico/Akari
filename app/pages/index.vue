@@ -81,10 +81,6 @@ const boardSizes = Object.values(BoardSizeType)
 const difficulties = Object.values(DifficultyType)
     .map((diff) => ({ label: diff, value: diff }));
 
-    console.log(difficulties);
-    
-
-
 
 const startGame = async () => {
     await navigateTo("/Game")

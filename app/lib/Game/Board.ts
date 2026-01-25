@@ -25,4 +25,13 @@ export class Board {
       board.solution = generatedBoard.solution;
       return board;
   }
+
+    static random(rows = Board.DEFAULT_SIZE, cols = Board.DEFAULT_SIZE): Board {
+      const board = new Board();
+      board.rows = rows; board.cols = cols;
+      const generatedBoard = new GenerateBoard(rows, cols, true);
+      board.board = generatedBoard.board;
+      board.solution = generatedBoard.solution;
+      return board;
+  }
 }
