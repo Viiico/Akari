@@ -1,12 +1,28 @@
 <template>
     <NavigationPanel />
     <main class="game-container">
-        <div class="container mx-auto p-4">
-            <!-- Winning Message -->
-            <div v-if="gameState === GameStates.WON"
-                class="mb-6 p-4 bg-green-900/30 border border-green-500 rounded-md">
-                <h3 class="text-lg font-semibold text-green-400 text-center">Gratulacje! Rozwiązałeś planszę!</h3>
+        <!-- Winning Message -->
+        <div v-if="gameState === GameStates.WON" class="mb-6 p-4 bg-green-900/30 border border-green-500 rounded-md">
+            <h3 class="text-lg font-semibold text-green-400 text-center">Gratulacje! Rozwiązałeś planszę!</h3>
+            <div class="text-center mt-2">
+                <p>Czas: {{ formattedTime }}</p>
+                <p>Liczba ruchów: {{ movesCount }}</p>
+                <p>Uzyskany wynik: {{ calculatedScore }}</p>
             </div>
+        </div>
+
+        <!-- Game Stats -->
+        <div v-if="gameState !== GameStates.WON" class="mb-6 flex justify-center items-center space-x-8">
+            <div class="stat-box">
+                <div class="stat-label">Czas</div>
+                <div class="stat-value">{{ formattedTime }}</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-label">Ruchy</div>
+                <div class="stat-value">{{ movesCount }}</div>
+            </div>
+        </div>
+        <div class="container mx-auto p-4">
             <!-- Game Board -->
             <div class="flex justify-center mb-6">
                 <div id='board' v-if="boardGrid.length > 0" class="inline-block p-4 bg-gray 800 rounded-lg">
@@ -86,13 +102,16 @@ const {
     rows,
     cols,
     boardGrid,
+    movesCount,
+    formattedTime,
+    calculatedScore,
     initializeBoard,
     handleCellClickLeft,
     handleCellClickRight
 } = useGameBoard();
 
 onMounted(() => {
-    initializeBoard(selectedSize.value, selectedSize.value);
+    initializeBoard(selectedSize.value, selectedSize.value, selectedDifficulty.value);
 });
 
 
