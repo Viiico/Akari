@@ -3,18 +3,18 @@
     <main class="container min-h-screen text-white p-4">
         <!-- Winning Message -->
         <div v-if="gameState === GameStates.WON" class="mb-6 p-4 bg-green-800 border border-green-600 rounded">
-            <h3 class="text-xl font-bold text-center mb-2">Gratulacje! Rozwiązałeś planszę!</h3>
+            <h3 class="text-xl font-bold text-center mb-2">Congratulations! You solved the board!</h3>
             <div class="flex justify-center space-x-8">
                 <div class="text-center">
-                    <div class="text-gray-300 text-sm">Czas</div>
+                    <div class="text-gray-300 text-sm">Time</div>
                     <div class="text-2xl font-bold">{{ formattedTime }}</div>
                 </div>
                 <div class="text-center">
-                    <div class="text-gray-300 text-sm">Ruchy</div>
+                    <div class="text-gray-300 text-sm">Move Count</div>
                     <div class="text-2xl font-bold">{{ movesCount }}</div>
                 </div>
                 <div class="text-center">
-                    <div class="text-gray-300 text-sm">Wynik</div>
+                    <div class="text-gray-300 text-sm">Score</div>
                     <div class="text-2xl font-bold text-yellow-400">{{ calculatedScore }}</div>
                 </div>
             </div>
@@ -23,17 +23,17 @@
             <div class="text-center mt-6">
                 <button v-if="userLoggedIn && !scoreSubmitted && !isSubmitting" @click="submitScore"
                     class="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-md transition-colors">
-                    Zapisz wynik w rankingu
+                    Submit the score
                 </button>
                 <button v-if="userLoggedIn && !scoreSubmitted && isSubmitting" disabled
                     class="px-6 py-3 bg-blue-400 text-white font-medium rounded-md transition-colors">
-                    Zapisywanie...
+                    Saving...
                 </button>
                 <div v-if="userLoggedIn && scoreSubmitted" class="text-green-400 font-medium">
-                    ✓ Wynik został zapisany!
+                    ✓ Score has been successfully saved!
                 </div>
                 <div v-if="!userLoggedIn" class="text-yellow-400 text-sm mt-2">
-                    Zaloguj się, aby mieć opcję zapisania swojego wyniku
+                    Log in to your account to save your score.
                 </div>
                 <div v-if="submitError" class="text-red-400 text-sm mt-2">
                     {{ submitError }}
@@ -44,11 +44,11 @@
         <!-- Game Stats (During Play) -->
         <div v-if="gameState !== GameStates.WON" class="mb-6 flex justify-center space-x-8">
             <div class="text-center">
-                <div class="text-gray-400 text-sm">Czas</div>
+                <div class="text-gray-400 text-sm">Time</div>
                 <div class="text-2xl font-bold">{{ formattedTime }}</div>
             </div>
             <div class="text-center">
-                <div class="text-gray-400 text-sm">Ruchy</div>
+                <div class="text-gray-400 text-sm">Move Count</div>
                 <div class="text-2xl font-bold">{{ movesCount }}</div>
             </div>
         </div>
@@ -60,9 +60,9 @@
                 <p class="text-sm items-center flex justify-center">
                     <button @click="toggleSignDropdown"
                         class="nav-link inline-block text-blue-400 hover:text-blue-300 transition-colors font-medium">
-                        Zaloguj się
+                        Log in
                     </button>
-                    , aby Twój wynik został zapisany w rankingu.
+                    to your account to save your score.
                 </p>
             </div>
         </div>
@@ -87,15 +87,15 @@
         <!-- Game Controls -->
         <div class="flex flex-wrap justify-center gap-4">
             <NuxtLink to="/" class="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded">
-                Wyjdź z gry
+                Leave The Game
             </NuxtLink>
             <button @click="printDiv()"
                 class="px-5 py-2 bg-gray-700 hover:bg-gray-600 text-white font-medium rounded">
-                Drukuj planszę
+                Print The Board
             </button>
             <button @click="startNewGame"
                 class="px-5 py-2 bg-green-600 hover:bg-green-700 text-white font-medium rounded">
-                Nowa gra
+                Start New Game
             </button>
         </div>
     </main>
