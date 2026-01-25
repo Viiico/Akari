@@ -26,7 +26,7 @@
                     </button>
                     <button @click="initializeBoard(selectedSize, selectedSize)"
                         class="button px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-md transition-colors disabled:bg-gray-500">
-                    Start new game
+                    Start a new game
                     </button> 
             </div>
         </div>
