@@ -55,8 +55,6 @@ async function submitForm() {
     username.value = form.username;
     await navigateTo('/');
     form.reset();
-
-    // error.value = "User successfully created";
 }
 
 const form = reactive({

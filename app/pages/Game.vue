@@ -1,6 +1,23 @@
 <template>
     <NavigationPanel />
-    <main class="how-to-play-page">
+    <main class="game-container">
+        <div class="container mx-auto p-4">
+            <!-- Game Board -->
+            <div class="flex justify-center mb-6">
+                <div v-if="boardGrid.length > 0" class="inline-block p-4 bg-gray 800 rounded-lg">
+                    <div class="grid gap-0" :style="{ gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))` }">
+                        <div v-for="(row, rowIndex) in boardGrid" :key="rowIndex" class="contents">
+                            <template v-for="(cell, colIndex) in row" :key="colIndex">
+                                <WallCell v-if="cell.type === CellType.WALL" :cell="cell"></WallCell>
+                                <ReactiveCell v-else-if="cell.type === CellType.REACTIVE" :cell="cell"></ReactiveCell>
+                            </template>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <!-- <main class="how-to-play-page">
         <div class="container">
             <h1>Play Game - {{ selectedSizeLabel }} ({{ selectedDifficultyLabel }})</h1>
 
@@ -26,78 +43,78 @@
             </div>
 
         </div>
-    </main>
+    </main> -->
 </template>
 
-<script setup>
-const username = useState("username", () => "");
-const selectedSize = useState('selectedSize', () => 'small');
+<script setup lang="ts">
+import { computed, onMounted, ref } from 'vue';
+import { useGameBoard } from '../composables/useGameBoard';
+import { CellType } from '../lib/Types/Game';
+import { BoardSize as BoardSizeType, Difficulty as DifficultyType } from "../lib/Types/Game";
+import { useState } from '#app';
+
+const selectedSize = useState('selectedSize', () => BoardSizeType.SMALL);
 const selectedDifficulty = useState('selectedDifficulty', () => 'easy');
+const username = useState("username", () => "");
 
-const selectedSizeLabel = computed(() => {
-    const sizes = { small: '7×7', medium: '10×10', large: '14×14' };
-    return sizes[selectedSize.value] || '7×7';
+
+const {
+    board,
+    gameState,
+    rows,
+    cols,
+    boardGrid,
+    initializeBoard
+} = useGameBoard();
+
+onMounted(() => {
+    initializeBoard(selectedSize.value, selectedSize.value);
 });
 
-const selectedDifficultyLabel = computed(() => {
-    const difficulties = { easy: 'Easy', medium: 'Medium', hard: 'Hard' };
-    return difficulties[selectedDifficulty.value] || 'Easy';
-});
+// const selectedSizeLabel = computed(() => {
+//     const sizes = { small: '7×7', medium: '10×10', large: '14×14' };
+//     return sizes[selectedSize.value] || '7×7';
+// });
 
-const isPrinting = ref(false);
-const isSubmitting = ref(false);
-const lastSubmission = ref(null);
-const error = ref(null);
+// const selectedDifficultyLabel = computed(() => {
+//     const difficulties = { easy: 'Easy', medium: 'Medium', hard: 'Hard' };
+//     return difficulties[selectedDifficulty.value] || 'Easy';
+// });
 
-const submitRandomScore = async () => {
-    isSubmitting.value = true;
-    error.value = null;
+// const isSubmitting = ref(false);
+// const lastSubmission = ref(null);
+// const error = ref(null);
 
-    const score = Math.floor(Math.random() * 10000) + 1000;
-    const completionTime = Math.floor(Math.random() * 600) + 60;
+// const submitRandomScore = async () => {
+//     isSubmitting.value = true;
+//     error.value = null;
 
-    console.log(`About to send: ${username.value}, ...`);
-    
+//     const score = Math.floor(Math.random() * 10000) + 1000;
+//     const completionTime = Math.floor(Math.random() * 600) + 60;
 
-    const response = await $fetch.raw('/api/scores/submit-score', {
-        method: 'POST',
-        body: {
-            username: username.value,
-            score,
-            completionTime
-        },
-        async onResponseError({ response }) {
-            isSubmitting.value = false;
-            error.value = (response._data).message;
-            return;
-        }
-    });
-
-    lastSubmission.value = {
-        score: randomScore,
-        completionTime: randomTime,
-        userId: response.userId || 'Unknown'
-    };
-};
-
-function printDiv(divName) {
-    if(divName==null){
-        error.value='Brak'
-        return
-    }
-    else{
-    printContents = document.getElementById(divName).innerHTML;
-    originalContents = document.body.innerHTML;
-
-    document.body.innerHTML = printContents;
-
-    window.print();
-
-    document.body.innerHTML = originalContents;
-    }
-}
+//     console.log(`About to send: ${username.value}, ...`);
 
 
+//     const response = await $fetch.raw('/api/scores/submit-score', {
+//         method: 'POST',
+//         body: {
+//             username: username.value,
+//             score,
+//             completionTime
+//         },
+//         async onResponseError({ response }) {
+//             isSubmitting.value = false;
+//             error.value = (response._data).message;
+//             return;
+//         }
+//     });
+
+//     lastSubmission.value = {
+//         score: randomScore,
+//         completionTime: randomTime,
+//         userId: response.userId || 'Unknown'
+//     };
+// };
 </script>
 
 <style scoped>
