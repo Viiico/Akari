@@ -15,10 +15,10 @@
                     </div>
                 </div>
             </div>
-            <div class="mt-8 flex flex-wrap gap-3 justify">
+           <div class="mt-8 flex flex-wrap gap-3 justify-center">
                     <button @click="printDiv('board')"
                         class="button px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-md transition-colors disabled:bg-gray-500">
-                    Print
+                    Print game board
                 </button>
             </div>
         </div>
