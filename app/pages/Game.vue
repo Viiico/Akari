@@ -4,7 +4,7 @@
         <div class="container mx-auto p-4">
             <!-- Game Board -->
             <div class="flex justify-center mb-6">
-                <div v-if="boardGrid.length > 0" class="inline-block p-4 bg-gray 800 rounded-lg">
+                <div id='board' v-if="boardGrid.length > 0" class="inline-block p-4 bg-gray 800 rounded-lg">
                     <div class="grid gap-0" :style="{ gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))` }">
                         <div v-for="(row, rowIndex) in boardGrid" :key="rowIndex" class="contents">
                             <template v-for="(cell, colIndex) in row" :key="colIndex">
@@ -14,6 +14,12 @@
                         </div>
                     </div>
                 </div>
+            </div>
+                <div class="mt-8 flex flex-wrap gap-3 justify">
+                    <button @click="printDiv('board')"
+                        class="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-md transition-colors disabled:bg-gray-500">
+                        Print
+                    </button>
             </div>
         </div>
     </main>
@@ -70,6 +76,20 @@ const {
 onMounted(() => {
     initializeBoard(selectedSize.value, selectedSize.value);
 });
+
+
+function printDiv(divName: string) {
+    var printContents = document.getElementById(divName).innerHTML;
+    var originalContents = document.body.innerHTML;
+
+    document.body.innerHTML = printContents;
+
+    window.print();
+
+    document.body.innerHTML = originalContents;
+}
+
+
 
 // const selectedSizeLabel = computed(() => {
 //     const sizes = { small: '7×7', medium: '10×10', large: '14×14' };
