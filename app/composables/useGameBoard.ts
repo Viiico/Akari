@@ -10,8 +10,6 @@ export function useGameBoard() {
 
   const initializeBoard = (rows: number = Board.DEFAULT_SIZE, cols: number = Board.DEFAULT_SIZE) => {
       board.value = Board.empty(rows, cols);
-      console.log(board.value);
-      
       gameState.playingTime = 0;
   }
 

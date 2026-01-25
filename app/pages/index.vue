@@ -55,7 +55,8 @@
                     <h2 class="section-title">How to Play</h2>
                     <p class="paragraph text-lg">
                         Place light bulbs on the grid to illuminate all white cells. Light bulbs illuminate in straight
-                        lines until blocked by black cells. Numbers in black cells indicate exactly how many adjacent bulbs
+                        lines until blocked by black cells. Numbers in black cells indicate exactly how many adjacent
+                        bulbs
                         are required.
                     </p>
                     <NuxtLink to="/HowToPlay"
@@ -69,20 +70,18 @@
 </template>
 
 <script setup>
-const selectedSize = useState('selectedSize', () => 'small');
+import { BoardSize as BoardSizeType, Difficulty as DifficultyType } from "../lib/Types/Game";
+
+const selectedSize = useState('selectedSize', () => BoardSizeType.SMALL);
 const selectedDifficulty = useState('selectedDifficulty', () => 'easy');
 
-const boardSizes = [
-    { label: 'Small (7×7)', value: 'small' },
-    { label: 'Medium (10×10)', value: 'medium' },
-    { label: 'Large (14×14)', value: 'large' }
-];
+const boardSizes = Object.values(BoardSizeType)
+    .filter(val => typeof val === 'number')
+    .map((size) => ({ label: `${size}x${size}`, value: size }));
 
-const difficulties = [
-    { label: 'Easy', value: 'easy' },
-    { label: 'Medium', value: 'medium' },
-    { label: 'Hard', value: 'hard' }
-];
+const difficulties = Object.values(DifficultyType)
+    .map((diff) => ({ label: diff, value: diff }));
+
 
 const startGame = async () => {
     await navigateTo("/Game")
@@ -154,23 +153,23 @@ const startGame = async () => {
         height: calc(120vh - 60px);
         padding: 1rem;
     }
-    
+
     .container {
         padding: 0 1rem;
     }
-    
+
     .content-column {
         gap: 2rem;
     }
-    
+
     .section {
         padding: 1.5rem;
     }
-    
+
     .section-title {
         font-size: 1.4rem;
     }
-    
+
     .paragraph {
         font-size: 1rem;
     }
@@ -180,7 +179,7 @@ const startGame = async () => {
     .content-column {
         gap: 1.5rem;
     }
-    
+
     .section {
         padding: 1.5rem 2rem;
     }

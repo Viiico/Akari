@@ -3,7 +3,7 @@
         <div v-if="cell.state === ReactiveCellState.EMPTY && !cell.isLit" class="empty-cell"></div>
         <div v-else-if="cell.state === ReactiveCellState.EMPTY && cell.isLit" class="lit-empty-cell"></div>
         <div v-if="cell.state === ReactiveCellState.BULB">
-            <NuxtImg src="/lightbulb.png" alt="Light bulb" class="bulb-image" />
+            <NuxtImg preload format="webp" src="/lightbulb.png" alt="Lightbulb icon" class="bulb-image" />
         </div>
         <span v-else-if="cell.state === ReactiveCellState.MARKED" class="marked-x">X</span>
     </div>

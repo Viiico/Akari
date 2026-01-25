@@ -45,6 +45,13 @@
 import { computed, onMounted, ref } from 'vue';
 import { useGameBoard } from '../composables/useGameBoard';
 import { CellType } from '../lib/Types/Game';
+import { BoardSize as BoardSizeType, Difficulty as DifficultyType } from "../lib/Types/Game";
+import { useState } from '#app';
+
+const selectedSize = useState('selectedSize', () => BoardSizeType.SMALL);
+const selectedDifficulty = useState('selectedDifficulty', () => 'easy');
+const username = useState("username", () => "");
+
 
 const {
     board,
@@ -56,15 +63,8 @@ const {
 } = useGameBoard();
 
 onMounted(() => {
-    initializeBoard();
-    
+    initializeBoard(selectedSize.value, selectedSize.value);
 });
-
-
-
-// const username = useState("username", () => "");
-// const selectedSize = useState('selectedSize', () => 'small');
-// const selectedDifficulty = useState('selectedDifficulty', () => 'easy');
 
 // const selectedSizeLabel = computed(() => {
 //     const sizes = { small: '7×7', medium: '10×10', large: '14×14' };
