@@ -9,19 +9,25 @@
                         <div v-for="(row, rowIndex) in boardGrid" :key="rowIndex" class="contents">
                             <template v-for="(cell, colIndex) in row" :key="colIndex">
                                 <WallCell v-if="cell.type === CellType.WALL" :cell="cell"></WallCell>
-                                <ReactiveCell v-else-if="cell.type === CellType.REACTIVE" :cell="cell"
-                                    @click="handleCellClickLeft(rowIndex, colIndex)"
-                                    @click.right.prevent="handleCellClickRight(rowIndex, colIndex)"></ReactiveCell>
+                                <ReactiveCell v-else-if="cell.type === CellType.REACTIVE" :cell="cell"></ReactiveCell>
                             </template>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="mt-8 flex flex-wrap gap-3 justify-center">
-                <button @click="printDiv('board')"
-                    class="button px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-md transition-colors disabled:bg-gray-500">
+           <div class="mt-8 flex flex-wrap gap-3 justify-center">
+                    <button @click="quitGame"
+                        class="button px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-md transition-colors disabled:bg-gray-500">
+                    Quit the game
+                    </button>
+                   <button @click="printDiv('board')"
+                        class="button px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-md transition-colors disabled:bg-gray-500">
                     Print the game board
-                </button>
+                    </button>
+                    <button @click="initializeBoard(selectedSize, selectedSize)"
+                        class="button px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-md transition-colors disabled:bg-gray-500">
+                    Start new game
+                    </button> 
             </div>
         </div>
     </main>
@@ -56,11 +62,13 @@
 
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue';
-import { useState } from '#app';
 import { useGameBoard } from '../composables/useGameBoard';
 import { CellType } from '../lib/Types/Game';
 import { BoardSize as BoardSizeType, Difficulty as DifficultyType } from "../lib/Types/Game";
+import { useState } from '#app';
+import { useRouter } from 'vue-router';
 
+const router = useRouter()
 const selectedSize = useState('selectedSize', () => BoardSizeType.SMALL);
 const selectedDifficulty = useState('selectedDifficulty', () => 'easy');
 const username = useState("username", () => "");
@@ -72,14 +80,13 @@ const {
     rows,
     cols,
     boardGrid,
-    initializeBoard,
-    handleCellClickLeft,
-    handleCellClickRight
+    initializeBoard
 } = useGameBoard();
 
 onMounted(() => {
     initializeBoard(selectedSize.value, selectedSize.value);
 });
+
 
 function printDiv(divName: string) {
     var printContents = document.getElementById(divName).innerHTML;
@@ -90,6 +97,10 @@ function printDiv(divName: string) {
     window.print();
 
     document.body.innerHTML = originalContents;
+}
+
+function quitGame(){
+    router.push('/');
 }
 
 
