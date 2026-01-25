@@ -4,10 +4,14 @@
         <div class="container">
             <h1>Play Game - {{ selectedSizeLabel }} ({{ selectedDifficultyLabel }})</h1>
 
-            <div class="mt-8">
+            <div class="mt-8 flex flex-wrap gap-3 justify">
                 <button @click="submitRandomScore" :disabled="isSubmitting"
                     class="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-md transition-colors disabled:bg-gray-500">
                     {{ isSubmitting ? 'Submitting...' : 'Submit Random Score' }}
+                </button>
+                <button @click="printDiv('board')"
+                    class="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-md transition-colors disabled:bg-gray-500">
+                    Print
                 </button>
             </div>
 
@@ -20,6 +24,7 @@
             <div v-if="error" class="mt-6 p-4 bg-red-900/30 border border-red-500 rounded-md">
                 <p class="text-red-400">Error: {{ error }}</p>
             </div>
+
         </div>
     </main>
 </template>
@@ -39,6 +44,7 @@ const selectedDifficultyLabel = computed(() => {
     return difficulties[selectedDifficulty.value] || 'Easy';
 });
 
+const isPrinting = ref(false);
 const isSubmitting = ref(false);
 const lastSubmission = ref(null);
 const error = ref(null);
@@ -73,6 +79,25 @@ const submitRandomScore = async () => {
         userId: response.userId || 'Unknown'
     };
 };
+
+function printDiv(divName) {
+    if(divName==null){
+        error.value='Brak'
+        return
+    }
+    else{
+    printContents = document.getElementById(divName).innerHTML;
+    originalContents = document.body.innerHTML;
+
+    document.body.innerHTML = printContents;
+
+    window.print();
+
+    document.body.innerHTML = originalContents;
+    }
+}
+
+
 </script>
 
 <style scoped>

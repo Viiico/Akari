@@ -1,33 +1,32 @@
 <template>
   <NavigationPanel />
-		<main class="creator-page">
-			<div class="container">
-						<div class="content-column">
-								<section class="section">
-									<h2 class="section-title">Board prerequisites</h2>
-									<form class="space-y-6">
-									<div class="space-y-3">
-											<label class="block text-cbd5e0 text-sm font-medium mb-2">
-													Board Size
-											</label>
-											<div class="flex flex-wrap gap-3 justify-center">
-													<button v-for="size in boardSizes" :key="size.value" type="button"
-															@click="selectedSize = size.value" :class="[
-																	'px-6 py-3 rounded-lg border transition-colors flex-1 min-w-[60px]',
-																	selectedSize === size.value
-																			? 'bg-blue-600 border-blue-600 text-white'
-																			: 'bg-gray-700 border-gray-600 hover:bg-gray-600 text-gray-200'
-															]">
-															{{ size.label }}
-													</button>
-											</div>
-									</div>
-									</form>
-								</section>
-						</div>
-			</div>
-		</main>
-
+    <main class="creator-page">
+        <div class="container">
+            <div class="content-column">
+                <section class="section">
+                    <h2 class="section-title">Board prerequisites</h2>
+                    <form class="space-y-6">
+                    <div class="space-y-3">
+                        <label class="block text-cbd5e0 text-sm font-medium mb-2">
+                                Board Size
+                        </label>
+                        <div class="flex flex-wrap gap-3 justify-center">
+                            <button v-for="size in boardSizes" :key="size.value" type="button"
+                                @click="selectedSize = size.value" :class="[
+                                    'px-6 py-3 rounded-lg border transition-colors flex-1 min-w-[60px]',
+                                    selectedSize === size.value
+                                        ? 'bg-blue-600 border-blue-600 text-white'
+                                        : 'bg-gray-700 border-gray-600 hover:bg-gray-600 text-gray-200'
+                                ]">
+                                {{ size.label }}
+                            </button>
+                        </div>
+                    </div>
+                    </form>
+                </section>
+            </div>
+        </div>
+    </main>
 </template>
 
 <script setup>
