@@ -9,25 +9,27 @@
                         <div v-for="(row, rowIndex) in boardGrid" :key="rowIndex" class="contents">
                             <template v-for="(cell, colIndex) in row" :key="colIndex">
                                 <WallCell v-if="cell.type === CellType.WALL" :cell="cell"></WallCell>
-                                <ReactiveCell v-else-if="cell.type === CellType.REACTIVE" :cell="cell"></ReactiveCell>
+                                <ReactiveCell v-else-if="cell.type === CellType.REACTIVE" :cell="cell"
+                                    @click="handleCellClickLeft(rowIndex, colIndex)"
+                                    @click.right.prevent="handleCellClickRight(rowIndex, colIndex)"></ReactiveCell>
                             </template>
                         </div>
                     </div>
                 </div>
             </div>
-           <div class="mt-8 flex flex-wrap gap-3 justify-center">
-                    <button @click="quitGame"
-                        class="button px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-md transition-colors disabled:bg-gray-500">
+            <div class="mt-8 flex flex-wrap gap-3 justify-center">
+                <button @click="quitGame"
+                    class="button px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-md transition-colors disabled:bg-gray-500">
                     Quit the game
-                    </button>
-                   <button @click="printDiv('board')"
-                        class="button px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-md transition-colors disabled:bg-gray-500">
+                </button>
+                <button @click="printDiv('board')"
+                    class="button px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-md transition-colors disabled:bg-gray-500">
                     Print the game board
-                    </button>
-                    <button @click="initializeBoard(selectedSize, selectedSize)"
-                        class="button px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-md transition-colors disabled:bg-gray-500">
+                </button>
+                <button @click="initializeBoard(selectedSize, selectedSize)"
+                    class="button px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-md transition-colors disabled:bg-gray-500">
                     Start a new game
-                    </button> 
+                </button>
             </div>
         </div>
     </main>
@@ -79,7 +81,9 @@ const {
     rows,
     cols,
     boardGrid,
-    initializeBoard
+    initializeBoard,
+    handleCellClickLeft,
+    handleCellClickRight
 } = useGameBoard();
 
 onMounted(() => {
@@ -98,7 +102,7 @@ function printDiv(divName: string) {
     document.body.innerHTML = originalContents;
 }
 
-function quitGame(){
+function quitGame() {
     router.push('/');
 }
 

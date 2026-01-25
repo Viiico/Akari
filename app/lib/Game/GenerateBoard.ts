@@ -71,7 +71,17 @@ export class GenerateBoard {
       this.cellsToFill.splice(randomIndex, 1);
       const cellRow = Math.floor(cellIndex / cols);
       const cellCol = cellIndex % cols;
-      this.genValidWall(cellRow, cellCol, this.board, difficulty);
+      this.genValidWall(cellRow, cellCol, this.solution, difficulty);
+    }
+
+    for(let i=0; i<rows; i++){
+      for(let j=0; j<cols; j++){
+        if(this.solution[i]![j]?.type === CellType.REACTIVE){
+          this.board[i]![j] = new ReactiveCell(0);
+        }else{
+          this.board[i]![j] = new WallCell(this.solution[i]![j]!.state);
+        }
+      }
     }
   }
 
