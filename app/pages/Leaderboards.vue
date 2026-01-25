@@ -38,7 +38,7 @@
             <th class="border p-2 w-12">No.</th>
             <th class="border p-2 w-1/3">User name</th>
             <th class="border p-2 w-1/3">Score</th>
-            <th class="border p-2">Date</th>
+            <th class="border p-2 w-1/3">Date</th>
           </tr>
         </thead>
         <tbody>
