@@ -43,7 +43,7 @@ export class GenerateBoard {
       }
       return;
     }
-    
+
     this.generateValidBoard(rows, cols, difficulty);
   }
 
@@ -64,9 +64,9 @@ export class GenerateBoard {
       }
     }
 
-    while(this.cellsToFill.length > 0){
+    while (this.cellsToFill.length > 0) {
       const randomIndex = getRandomInt(this.cellsToFill.length);
-      
+
       const cellIndex = this.cellsToFill[randomIndex]!;
       this.cellsToFill.splice(randomIndex, 1);
       const cellRow = Math.floor(cellIndex / cols);
@@ -74,11 +74,13 @@ export class GenerateBoard {
       this.genValidWall(cellRow, cellCol, this.solution, difficulty);
     }
 
-    for(let i=0; i<rows; i++){
-      for(let j=0; j<cols; j++){
-        if(this.solution[i]![j]?.type === CellType.REACTIVE){
+    this.fixSurroundedZeroWalls(rows, cols);
+
+    for (let i = 0; i < rows; i++) {
+      for (let j = 0; j < cols; j++) {
+        if (this.solution[i]![j]?.type === CellType.REACTIVE) {
           this.board[i]![j] = new ReactiveCell(0);
-        }else{
+        } else {
           this.board[i]![j] = new WallCell(this.solution[i]![j]!.state);
         }
       }
@@ -184,16 +186,64 @@ export class GenerateBoard {
       [0, 1],
     ];
 
-    for(const dir of directions){
+    for (const dir of directions) {
       let lightRow = bulbRow + dir[0]!;
       let lightCol = bulbCol + dir[1]!;
-      while(lightRow >= 0 && lightRow < board.length && lightCol >= 0 && lightCol < board[lightRow]!.length){
+      while (
+        lightRow >= 0 &&
+        lightRow < board.length &&
+        lightCol >= 0 &&
+        lightCol < board[lightRow]!.length
+      ) {
         const cell: ReactiveCell = board[lightRow]![lightCol]! as ReactiveCell;
-        if(cell.type !== CellType.REACTIVE) break; // Hit wall
-        if(!cell.isLit) this.cellsToFill.splice(this.cellsToFill.indexOf(lightRow * board[0]!.length + lightCol), 1);
+        if (cell.type !== CellType.REACTIVE) break; // Hit wall
+        if (!cell.isLit)
+          this.cellsToFill.splice(
+            this.cellsToFill.indexOf(lightRow * board[0]!.length + lightCol),
+            1,
+          );
         cell.isLit = true;
         lightRow += dir[0]!;
         lightCol += dir[1]!;
+      }
+    }
+  }
+
+  private fixSurroundedZeroWalls(rows: number, cols: number) {
+    for (let i = 0; i < rows; i++) {
+      for (let j = 0; j < cols; j++) {
+        const cell = this.solution[i]![j]!;
+
+        if (cell.type !== CellType.WALL || cell.state !== 0) continue;
+        let wallNeighbors = 0;
+
+        const directions = [
+          [-1, 0],
+          [1, 0],
+          [0, -1],
+          [0, 1],
+        ];
+
+        for (const dir of directions) {
+          const newRow = i + dir[0]!;
+          const newCol = j + dir[1]!;
+
+          // Jeśli komórka jest na krawędzi, liczymy to jako ścianę
+          if (newRow < 0 || newRow >= rows || newCol < 0 || newCol >= cols) {
+            wallNeighbors++;
+          } else {
+            const neighbor = this.solution[newRow]![newCol]!;
+            // Jeśli sąsiad jest ścianą
+            if (neighbor.type === CellType.WALL) {
+              wallNeighbors++;
+            }
+          }
+        }
+
+        // Jeśli ściana ma 4 sąsiadów-ścian (lub krawędzi), zmień jej stan na 5
+        if (wallNeighbors === 4) {
+          cell.state = 5;
+        }
       }
     }
   }
@@ -207,13 +257,13 @@ function getRandomInt(max: number): number {
 function weightedRandom(weights: number[]): number {
   const totalWeight = weights.reduce((sum, weight) => sum + weight, 0);
   let random = Math.random() * totalWeight;
-  
+
   for (let i = 0; i < weights.length; i++) {
     if (random < weights[i]!) {
       return i;
     }
     random -= weights[i]!;
   }
-  
+
   return weights.length - 1;
 }

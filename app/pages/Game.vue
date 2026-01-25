@@ -47,7 +47,7 @@
                     v-if="!userLoggedIn"
                     class="text-yellow-400 text-sm mt-2"
                 >
-                    Zaloguj się, aby zapisać swój wynik w rankingu.
+                    Zaloguj się, aby mieć opcję zapisania swojego wyniku
                 </div>
                 <div 
                     v-if="submitError"
